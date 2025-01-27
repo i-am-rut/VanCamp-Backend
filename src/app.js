@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
+import vanRoutes from './routes/vanRoutes.js'
 
 
 // load environment variables
@@ -11,6 +12,7 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use('/api/auth', authRoutes)
+app.use('/api/vans', vanRoutes)
 
 
 // Database Connection
