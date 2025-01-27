@@ -74,6 +74,8 @@ const vanSchema = new mongoose.Schema({
     },
 })
 
+vanSchema.index({ 'details.location.coordinates': '2dsphere' });
+
 const Van = mongoose.model('Van', vanSchema)
 
 export default Van
