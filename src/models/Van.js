@@ -27,7 +27,12 @@ const vanSchema = new mongoose.Schema({
         required: [true, 'Category is required'],
     },
     availability: {
-        type: [Date],
+        type: [
+            {
+                startDate: {type: Date, required: true},
+                endDate: {type: Date, required: true},
+            },
+        ],
         default: [],
     },
     insuranceDetails: {
@@ -37,8 +42,8 @@ const vanSchema = new mongoose.Schema({
     addOns: {
         type: [
             {
-                name: String,
-                price: Number,
+                name: {type: String, required: true},
+                price: {type: Number, required: true},
             },
         ],
         default: [],
