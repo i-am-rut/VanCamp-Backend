@@ -4,6 +4,8 @@ import cors from 'cors'
 import connectDB from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
 import vanRoutes from './routes/vanRoutes.js'
+import bookingRoutes from './routes/bookingRoutes.js'
+import transactionRoutes from './routes/transactionRoutes.js'
 import wishlistRoutes from './routes/wishlistRoutes.js'
 
 
@@ -13,9 +15,6 @@ const app = express()
 
 // Middleware
 app.use(express.json())
-app.use('/api/auth', authRoutes)
-app.use('/api/vans', vanRoutes)
-app.use('/api/wishlist', wishlistRoutes)
 app.use(cors())
 
 
@@ -23,6 +22,10 @@ app.use(cors())
 connectDB()
 
 // Routes
+app.use('/api/auth', authRoutes)
+app.use('/api/vans', vanRoutes)
+app.use("/api/transactions", transactionRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 app.get('/', (req, res) => {
     res.send('Welcome to VanCamp API')
 })

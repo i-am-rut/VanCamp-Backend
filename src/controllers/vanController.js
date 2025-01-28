@@ -3,14 +3,14 @@ import asyncHandler from "express-async-handler"
 
 const createVan = async (req, res) => {
     try {
-        const { name, description, price, location, category, hostId } = req.body
+        const { name, description, basePrice, location, category, hostId } = req.body
 
         const images = req.files.map(file => file.path)
 
         const van = await Van.create({
             name,
             description,
-            price,
+            basePrice,
             location,
             category,
             images,
@@ -159,6 +159,32 @@ const calculateBookingPrice = (van, startDate, endDate) => {
   
     return totalPrice;
 };
+
+const deleteVan = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the van to ensure it exists
+        const van = await Van.findById(id);
+
+        if (!van) {
+            return res.status(404).json({ message: "Van not found" });
+        }
+
+        // Authorization check (optional)
+        if (van.hostId.toString() !== req.user.id ) {
+            // && req.user.role !== 'admin' <=use this if needed
+            return res.status(403).json({ message: "You are not authorized to delete this van" });
+        }
+
+        // Delete the van
+        await Van.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Van deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
   
 
-export { createVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations, calculateBookingPrice }
+export { createVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations, calculateBookingPrice, deleteVan }
