@@ -13,7 +13,7 @@ const vanSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
-    price: {
+    basePrice: {
         type: Number,
         required: [true, 'Price is required'],
     },
@@ -50,13 +50,18 @@ const vanSchema = new mongoose.Schema({
     },
     seasonalPricing: {
         type: [
-            {
-                season: String,
-                price: Number,
-            },
+          {
+            startDate: { type: Date, required: true },
+            endDate: { type: Date, required: true },
+            price: { type: Number, required: true },
+          },
         ],
         default: [],
-    },
+      },
+      longTermDiscounts: {
+        weekly: { type: Number, default: 0 }, // % discount for weekly bookings
+        monthly: { type: Number, default: 0 }, // % discount for monthly bookings
+      },
     hostId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

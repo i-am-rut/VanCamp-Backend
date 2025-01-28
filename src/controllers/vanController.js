@@ -134,5 +134,31 @@ const getRecommendations = async (req, res) => {
     }
 };
 
+const calculateBookingPrice = (van, startDate, endDate) => {
+    let totalPrice = 0;
+    let days = 0;
+    let currentDate = new Date(startDate);
+  
+    while (currentDate <= new Date(endDate)) {
+      days++;
+      const seasonalPrice = van.seasonalPricing.find(
+        (season) =>
+          currentDate >= new Date(season.startDate) &&
+          currentDate <= new Date(season.endDate)
+      );
+      totalPrice += seasonalPrice ? seasonalPrice.price : van.basePrice;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  
+    // Apply discounts for long-term bookings
+    if (days >= 30) {
+      totalPrice -= (totalPrice * van.longTermDiscounts.monthly) / 100;
+    } else if (days >= 7) {
+      totalPrice -= (totalPrice * van.longTermDiscounts.weekly) / 100;
+    }
+  
+    return totalPrice;
+};
+  
 
-export { createVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations }
+export { createVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations, calculateBookingPrice }

@@ -14,6 +14,6 @@ router.get('/:id', protect, getBookingDetails);
 router.get('/renter', protect, getBookingsByRenter);
 
 // Cancel a booking
-router.put('/cancel/:id', protect, cancelBooking);
+router.patch('/cancel/:id', protect, cancelBooking);
 
 export default router;
