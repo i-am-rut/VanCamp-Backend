@@ -2,14 +2,14 @@ import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema(
   {
-    userId: {
+    van: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Van',
+    required: true,
+    },
+    renter: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-    },
-    vanId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Van',
       required: true,
     },
     startDate: {
@@ -20,6 +20,15 @@ const bookingSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    addOns: {
+        type: [
+          {
+            name: { type: String, required: true },
+            price: { type: Number, required: true },
+          }
+        ],
+        default: [],
+    },
     totalAmount: {
       type: Number,
       required: true,
@@ -29,12 +38,6 @@ const bookingSchema = new mongoose.Schema(
       enum: ['pending', 'confirmed', 'canceled'],
       default: 'pending',
     },
-    addOns: [
-      {
-        name: { type: String, required: true },
-        price: { type: Number, required: true },
-      },
-    ],
   },
   { timestamps: true }
 );

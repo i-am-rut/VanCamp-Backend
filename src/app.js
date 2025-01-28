@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import connectDB from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
 import vanRoutes from './routes/vanRoutes.js'
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/vans', vanRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use(cors())
 
 
 // Database Connection

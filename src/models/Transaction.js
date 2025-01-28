@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema(
   {
-    bookingId: {
+    booking: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Booking',
       required: true,
@@ -11,10 +11,10 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    razorpayPaymentId: {
+    paymentId: {
       type: String,
     },
-    razorpayOrderId: {
+    OrderId: {
       type: String,
     },
     razorpaySignature: {
@@ -25,7 +25,7 @@ const transactionSchema = new mongoose.Schema(
       enum: ['paid', 'failed', 'refunded', 'pending'],
       default: 'pending',
     },
-    date: {
+    createdAt: {
       type: Date,
       default: Date.now,
     },
