@@ -2,6 +2,50 @@ import Booking from '../models/Booking.js';
 import Van from '../models/Van.js';
 import { calculateBookingPrice } from './vanController.js';
 
+const getVanAvailability = async (req, res) => {
+  try {
+      const { id } = req.params; // Van ID
+      const { fromDate, tillDate } = req.query;
+
+      if (!fromDate || !tillDate) {
+          return res.status(400).json({ message: "Please provide both fromDate and tillDate" });
+      }
+
+      const from = new Date(fromDate);
+      const till = new Date(tillDate);
+
+      if (isNaN(from.getTime()) || isNaN(till.getTime())) {
+          return res.status(400).json({ message: "Invalid date format" });
+      }
+
+      if (from >= till) {
+          return res.status(400).json({ message: "fromDate must be earlier than tillDate" });
+      }
+
+      // Check if the van exists
+      const van = await Van.findById(id);
+      if (!van) {
+          return res.status(404).json({ message: "Van not found" });
+      }
+
+      // Check for overlapping bookings
+      const overlappingBookings = await Booking.find({
+          vanId: id,
+          $or: [
+              { startDate: { $lt: till }, endDate: { $gt: from } }, // Existing booking overlaps with requested dates
+              { startDate: { $gte: from, $lte: till } }, // Booking starts within the requested range
+              { endDate: { $gte: from, $lte: till } } // Booking ends within the requested range
+          ]
+      });
+
+      const isAvailable = overlappingBookings.length === 0;
+
+      res.status(200).json({ available: isAvailable });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+}
+
 
  const createBooking = async (req, res) => {
   try {
@@ -122,4 +166,4 @@ const cancelBooking = async (req, res) => {
 };
 
 
-export { createBooking, getBookingDetails, getBookingsByRenter, cancelBooking }
+export { createBooking, getBookingDetails, getBookingsByRenter, cancelBooking, getVanAvailability }

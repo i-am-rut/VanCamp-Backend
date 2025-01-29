@@ -1,8 +1,11 @@
 import express from 'express';
-import { createBooking, getBookingDetails, getBookingsByRenter, cancelBooking } from '../controllers/bookingController.js';
+import { createBooking, getBookingDetails, getBookingsByRenter, cancelBooking, getVanAvailability } from '../controllers/bookingController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+// Route to check van availability
+router.get("/availability/:id", getVanAvailability);
 
 // Create a booking
 router.post('/create', protect, createBooking);

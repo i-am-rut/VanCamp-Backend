@@ -26,6 +26,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/vans', vanRoutes)
 app.use("/api/transactions", transactionRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/bookings', bookingRoutes)
 app.get('/', (req, res) => {
     res.send('Welcome to VanCamp API')
 })
