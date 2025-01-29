@@ -2,15 +2,19 @@ import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema(
   {
-    van: {
+    vanId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Van',
     required: true,
     },
-    renter: {
+    renterId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+    renterContact: { 
+      type: String, 
+      required: true 
     },
     startDate: {
       type: Date,

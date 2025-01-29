@@ -49,8 +49,11 @@ const getVanAvailability = async (req, res) => {
 
  const createBooking = async (req, res) => {
   try {
-    const { vanId, startDate, endDate, addOns } = req.body;
-
+    const { vanId, startDate, endDate, renterContact, addOns } = req.body;
+        
+    if (!renterContact || renterContact.length < 10) {
+      return res.status(400).json({ message: "Valid contact number is required" });
+    }
     // Fetch van details
     const van = await Van.findById(vanId);
     if (!van) {
@@ -89,8 +92,8 @@ const getVanAvailability = async (req, res) => {
 
     // Create a booking
     const booking = await Booking.create({
-      user: req.user.id,
-      van: vanId,
+      renterId: req.user.id,
+      vanId,
       startDate,
       endDate,
       addOns,
@@ -99,6 +102,7 @@ const getVanAvailability = async (req, res) => {
         addOnsPrice,
         totalPrice,
       },
+      status: 'pending',
     });
 
     res.status(201).json({ message: "Booking created successfully", booking });
@@ -112,7 +116,7 @@ const getVanAvailability = async (req, res) => {
 
 const getBookingDetails = async (req, res) => {
     try {
-      const booking = await Booking.findById(req.params.id).populate('van').populate('renter');
+      const booking = await Booking.findById(req.params.id).populate('vanId renterId');
   
       if (!booking) {
         return res.status(404).json({ message: 'Booking not found' });
@@ -126,7 +130,7 @@ const getBookingDetails = async (req, res) => {
 
 const getBookingsByRenter = async (req, res) => {
     try {
-      const bookings = await Booking.find({ renter: req.user._id }).populate('van');
+      const bookings = await Booking.find({ renter: req.user._id }).populate('vanId');
   
       res.status(200).json(bookings);
     } catch (error) {

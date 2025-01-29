@@ -21,7 +21,7 @@ const createOrder = async (req, res) => {
     const receipt = `receipt_${bookingId}`;
     const order = await createRazorpayOrder(booking.price.totalPrice, receipt);
 
-    res.status(201).json({ message: "Order created successfully", order });
+    res.status(201).json({ message: "Order created successfully", order, renterContact: booking.renterContact });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error creating order", error: error.message });
