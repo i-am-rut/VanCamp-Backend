@@ -31,6 +31,7 @@ router.post('/register', asyncHandler(async (req, res) => {
         email: user.email,
         role: user.role,
         token: generateToken(user.id),
+        message: 'User successfully registered!',
         });
     } else {
         res.status(400);

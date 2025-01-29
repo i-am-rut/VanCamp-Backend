@@ -18,8 +18,8 @@ const getVanAvailability = async (req, res) => {
           return res.status(400).json({ message: "Invalid date format" });
       }
 
-      if (from >= till) {
-          return res.status(400).json({ message: "fromDate must be earlier than tillDate" });
+      if (from > till) {
+          return res.status(400).json({ message: "From date must be earlier than till date" });
       }
 
       // Check if the van exists
@@ -58,7 +58,7 @@ const getVanAvailability = async (req, res) => {
     }
 
     // Validate booking dates
-    if (new Date(startDate) >= new Date(endDate)) {
+    if (new Date(startDate) > new Date(endDate)) {
       return res.status(400).json({ message: "Invalid booking dates" });
     }
 
