@@ -1,5 +1,6 @@
 import express from 'express';
 import { loginUser, logoutUser, registerUser } from '../controllers/authController.js';
+import User from '../models/User.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -7,7 +8,7 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-router.get("/me", async (req, res) => {
+router.get("/me",protect,  async (req, res) => {
     try {
         const token = req.cookies.jwt;
         if (!token) {
