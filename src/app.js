@@ -18,7 +18,7 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(cors(
-    {origin: 'http://localhost:3000',  
+    {origin: process.env.NODE_ENV === 'production' ? ["http://localhost:3000", "https://vancamp.netlify.app"] : "http://localhost:3000",  
     credentials: true,}
 ))
 app.use(cookieParser())
