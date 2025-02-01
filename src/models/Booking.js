@@ -13,7 +13,7 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
     renterContact: { 
-      type: String, 
+      type: Number, 
       required: true 
     },
     startDate: {
@@ -40,8 +40,8 @@ const bookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Confirmed", "Cancelled", "Completed"],
-      default: "Confirmed",
+      enum: ["Confirmed", "Cancelled", "Completed", "Pending"],
+      default: "Pending",
     },
   },
   { timestamps: true }

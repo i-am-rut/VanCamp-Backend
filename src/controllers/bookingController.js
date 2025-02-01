@@ -1,4 +1,5 @@
 import Booking from '../models/Booking.js';
+import mongoose from 'mongoose';
 import Van from '../models/Van.js';
 import { calculateBookingPrice } from './vanController.js';
 
@@ -93,6 +94,7 @@ const getVanAvailability = async (req, res) => {
     // Create a booking
     const booking = await Booking.create({
       renterId: req.user.id,
+      renterContact,
       vanId,
       startDate,
       endDate,
@@ -102,7 +104,7 @@ const getVanAvailability = async (req, res) => {
         addOnsPrice,
         totalPrice,
       },
-      status: 'pending',
+      status: 'Pending',
     });
 
     res.status(201).json({ message: "Booking created successfully", booking });
@@ -130,8 +132,15 @@ const getBookingDetails = async (req, res) => {
 
 const getBookingsByRenter = async (req, res) => {
     try {
-      const bookings = await Booking.find({ renter: req.user._id }).populate('vanId');
-  
+
+      const renterObjectId = new mongoose.Types.ObjectId(req.user.id)
+
+      const bookings = await Booking.find({ renterId: renterObjectId }).populate('vanId');
+      
+      if (!bookings) {
+        return res.status(404).json({ message: 'No available bookings' });
+      }
+
       res.status(200).json(bookings);
     } catch (error) {
       res.status(400).json({ message: 'Error fetching bookings', error: error.message });
@@ -149,7 +158,7 @@ const cancelBooking = async (req, res) => {
     }
 
     // Ensure the user is the one who created the booking
-    if (booking.user.toString() !== req.user.id) {
+    if (booking.renterId.toString() !== req.user.id) {
       return res.status(403).json({ message: "Unauthorized action" });
     }
 
