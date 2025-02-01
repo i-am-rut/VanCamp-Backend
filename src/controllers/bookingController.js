@@ -131,20 +131,16 @@ const getBookingDetails = async (req, res) => {
 }
 
 const getBookingsByRenter = async (req, res) => {
-    try {
+  try {
 
-      const renterObjectId = new mongoose.Types.ObjectId(req.user.id)
+    const renterObjectId = new mongoose.Types.ObjectId(req.user.id)
 
-      const bookings = await Booking.find({ renterId: renterObjectId }).populate('vanId');
-      
-      if (!bookings) {
-        return res.status(404).json({ message: 'No available bookings' });
-      }
+    const bookings = await Booking.find({ renterId: renterObjectId }).populate('vanId')
 
-      res.status(200).json(bookings);
-    } catch (error) {
-      res.status(400).json({ message: 'Error fetching bookings', error: error.message });
-    }
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(400).json({ message: "Error fetching bookings", error: error.message });
+  }
 }
 
 const cancelBooking = async (req, res) => {
