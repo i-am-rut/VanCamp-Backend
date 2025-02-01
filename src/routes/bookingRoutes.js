@@ -13,11 +13,12 @@ router.post('/create', protect, createBooking);
 // Get all bookings by a renter
 router.get('/mybookings', protect, getBookingsByRenter);
 
+// Cancel a booking
+router.patch('/cancel/:id', protect, cancelBooking);
+
 // Get details of a specific booking
 router.get('/:id', protect, getBookingDetails);
 
 
-// Cancel a booking
-router.patch('/cancel/:id', protect, cancelBooking);
 
 export default router;
