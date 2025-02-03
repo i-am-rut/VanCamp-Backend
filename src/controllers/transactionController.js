@@ -13,7 +13,7 @@ const createOrder = async (req, res) => {
     }
 
     // Ensure the booking is not already paid
-    if (booking.status === "Paid") {
+    if (booking.status === "Confirmed") {
       return res.status(400).json({ message: "Booking is already paid" });
     }
 
@@ -40,7 +40,7 @@ const verifyPayment = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
-    booking.status = "Paid";
+    booking.status = "Confirmed";
     await booking.save();
 
     res.status(200).json({ message: "Payment verified successfully", booking });

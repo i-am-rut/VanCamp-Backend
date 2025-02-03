@@ -8,6 +8,7 @@ import vanRoutes from './routes/vanRoutes.js'
 import bookingRoutes from './routes/bookingRoutes.js'
 import transactionRoutes from './routes/transactionRoutes.js'
 import wishlistRoutes from './routes/wishlistRoutes.js'
+import hostRoutes from './routes/hostRoutes.js'
 
 
 // load environment variables
@@ -37,6 +38,7 @@ app.use('/api/vans', vanRoutes)
 app.use("/api/transactions", transactionRoutes)
 app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/bookings', bookingRoutes)
+app.use("/api/host", hostRoutes)
 app.get('/', (req, res) => {
     res.send('Welcome to VanCamp API')
 })
