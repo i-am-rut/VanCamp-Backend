@@ -1,5 +1,6 @@
 import { createRazorpayOrder, verifyRazorpayPayment } from "../utils/razorpayUtils.js";
 import Booking from "../models/Booking.js";
+import Transaction from "../models/Transaction.js";
 
 
 const createOrder = async (req, res) => {
@@ -43,9 +44,32 @@ const verifyPayment = async (req, res) => {
     booking.status = "Confirmed";
     await booking.save();
 
-    res.status(200).json({ message: "Payment verified successfully", booking });
+    // Create a new transaction entry
+    const transaction = new Transaction({
+      booking: bookingId,
+      amount: booking.price.totalPrice,
+      paymentId: razorpayPaymentId,
+      OrderId: razorpayOrderId,
+      razorpaySignature,
+      status: "paid",
+    });
+
+    await transaction.save();
+
+    res.status(200).json({ message: "Payment verified and transaction recorded successfully", booking, transaction });
   } catch (error) {
     console.error(error);
+    // Record failed transaction
+    const failedTransaction = new Transaction({
+      booking: bookingId,
+      amount: req.body.amount || 0, 
+      paymentId: razorpayPaymentId || "N/A",
+      OrderId: razorpayOrderId || "N/A",
+      razorpaySignature: razorpaySignature || "N/A",
+      status: "failed",
+    });
+
+    await failedTransaction.save();
     res.status(500).json({ message: "Error verifying payment", error: error.message });
   }
 };
