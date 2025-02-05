@@ -15,6 +15,7 @@ const createVan = async (req, res) => {
             category,
             images,
             hostId,
+            hostName,
         })
 
         res.status(201).json(van)

@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     enum: ['host', 'renter'],
     default: 'renter',
   },
+  location: {
+    type: String,
+    default: ''
+  },
   wishlist: [
     {
       type: mongoose.Schema.Types.ObjectId,

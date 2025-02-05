@@ -67,6 +67,10 @@ const vanSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    hostName: {
+        type: String,
+        required: true,
+    },
     reviews: {
         type: [
             {
