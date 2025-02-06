@@ -48,13 +48,60 @@ VanCamp-Backend/
 
 ### **Authentication**
 - `POST /auth/register` - Register a new user
+  **Response:**
+  ```json
+  {
+    "message": "User registered successfully",
+    "user": {
+      "_id": "65a8b3c6e4b0b8d8dabc1234",
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  }
+  ```
 - `POST /auth/login` - Login and get JWT token
+  **Response:**
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "_id": "65a8b3c6e4b0b8d8dabc1234",
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  }
+  ```
 - `GET /auth/user` - Get authenticated user details
 
 ### **Van Management**
 - `POST /vans/create` - Create a new van listing
+  **Response:**
+  ```json
+  {
+    "message": "Van created successfully",
+    "van": {
+      "_id": "65a8b3c6e4b0b8d8dabc5678",
+      "title": "Cozy Camper",
+      "location": "Los Angeles, CA",
+      "pricePerDay": 80
+    }
+  }
+  ```
 - `GET /vans` - Get all available vans
 - `GET /vans/:id` - Get details of a specific van
+  **Response:**
+  ```json
+  {
+    "_id": "65a8b3c6e4b0b8d8dabc5678",
+    "title": "Cozy Camper",
+    "description": "A comfortable camper van for road trips.",
+    "image": "https://cloudinary.com/sample.jpg",
+    "pricePerDay": 80,
+    "location": "Los Angeles, CA",
+    "host": "65a8b3c6e4b0b8d8dabc9999",
+    "availability": ["2025-03-01", "2025-03-10"]
+  }
+  ```
 - `DELETE /vans/:id` - Remove a van listing
 
 ### **Wishlist & Recommendations**
@@ -65,10 +112,25 @@ VanCamp-Backend/
 
 ### **Booking & Payments**
 - `POST /booking/create` - Book a van
+  **Response:**
+  ```json
+  {
+    "message": "Booking successful",
+    "booking": {
+      "_id": "65a8b3c6e4b0b8d8dabc7777",
+      "van": "65a8b3c6e4b0b8d8dabc5678",
+      "user": "65a8b3c6e4b0b8d8dabc1234",
+      "startDate": "2025-04-05",
+      "endDate": "2025-04-12",
+      "totalPrice": 560,
+      "paymentStatus": "pending"
+    }
+  }
+  ```
 - `GET /booking/mybookings` - Retrieve user’s bookings
 - `PATCH /booking/modify/:bookingId` - Modify an existing booking
 - `POST /booking/cancel/:bookingId` - Cancel a booking
-- `POST /payment/initiate` - Process payment using Razorpay
+- `POST /transactions/create-order` - Process payment using Razorpay
 
 ### **Host Dashboard**
 - `GET /host/dashboard` - Get host earnings, analytics, and booking data
@@ -84,6 +146,7 @@ VanCamp-Backend/
   "name": "string",
   "email": "string",
   "password": "string",
+  "location" : "string",
   "wishlist": ["ObjectId"],
   "role": "user" | "host"
 }
@@ -98,6 +161,7 @@ VanCamp-Backend/
   "pricePerDay": "number",
   "location": "string",
   "host": "ObjectId",
+  "hostName": "string",
   "availability": ["date"]
 }
 ```
@@ -110,7 +174,7 @@ VanCamp-Backend/
   "startDate": "date",
   "endDate": "date",
   "totalPrice": "number",
-  "paymentStatus": "pending" | "completed" | "cancelled"
+  "paymentStatus": "Pending" | "Completed" | "Cancelled" | "Completed"
 }
 ```
 
