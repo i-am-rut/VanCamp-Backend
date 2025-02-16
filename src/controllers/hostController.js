@@ -2,6 +2,20 @@ import mongoose from "mongoose";
 import Van from "../models/Van.js";
 import Booking from "../models/Booking.js";
 
+const getHostVans = async(req, res) => {
+  try {
+    console.log('In here')
+    if(req.user.role === 'host'){
+      const vans = await Van.find({ hostId: req.user.id })
+      res.status(200).json(vans)
+      console.log('completed')
+    }
+    res.status(401).json({ message: "Not authorized, you are not host"})
+  } catch (error) {
+    res.status(400).json({message: "Error fetching vans", error: error.message})
+  }
+}
+
 const getHostEarnings = async (req, res) => {
     try {
       const hostId = req.user._id;
@@ -40,7 +54,7 @@ const getHostEarnings = async (req, res) => {
       }
   
       // Calculate total earnings
-      const totalEarnings = bookings.reduce((sum, booking) => sum + booking.totalPrice, 0);
+      const totalEarnings = bookings.reduce((sum, booking) => sum + booking.price.totalPrice, 0);
       const avgEarnings = bookings.length ? totalEarnings / bookings.length : 0;
   
       // Breakdown earnings per van
@@ -50,7 +64,7 @@ const getHostEarnings = async (req, res) => {
         if (!vanEarnings[vanName]) {
           vanEarnings[vanName] = 0;
         }
-        vanEarnings[vanName] += booking.totalPrice;
+        vanEarnings[vanName] += booking.price.totalPrice;
       });
   
       res.status(200).json({
@@ -66,4 +80,4 @@ const getHostEarnings = async (req, res) => {
 }
   
 
-  export { getHostEarnings }
+  export { getHostEarnings, getHostVans }

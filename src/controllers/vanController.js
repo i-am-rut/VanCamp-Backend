@@ -173,8 +173,7 @@ const deleteVan = async (req, res) => {
         }
 
         // Authorization check (optional)
-        if (van.hostId.toString() !== req.user.id ) {
-            // && req.user.role !== 'admin' <=use this if needed
+        if (van.hostId.toString() !== req.user.id && req.user.role !== 'host' ) {
             return res.status(403).json({ message: "You are not authorized to delete this van" });
         }
 
