@@ -24,6 +24,25 @@ const createVan = async (req, res) => {
     }
 }
 
+const editVan = async (req, res) => {
+    try {
+      const { vanId } = req.params;
+      const updates = req.body; // The fields to update
+  
+      // Find and update the van
+      const updatedVan = await Van.findByIdAndUpdate(vanId, updates, { new: true });
+  
+      if (!updatedVan) {
+        return res.status(404).json({ message: "Van not found" });
+      }
+  
+      res.status(200).json({ message: "Van updated successfully", van: updatedVan });
+    } catch (error) {
+      console.error("Error updating van:", error);
+      res.status(500).json({ message: "Error updating van", error: error.message });
+    }
+}
+
 const getVans = async (req, res) => {
     try {
         const vans = await Van.find()
@@ -187,4 +206,4 @@ const deleteVan = async (req, res) => {
 }
   
 
-export { createVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations, calculateBookingPrice, deleteVan }
+export { createVan, editVan, getVans, getVan, updateAvailability, updateAddOns, getRecommendations, calculateBookingPrice, deleteVan }

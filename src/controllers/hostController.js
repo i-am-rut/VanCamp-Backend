@@ -4,17 +4,20 @@ import Booking from "../models/Booking.js";
 
 const getHostVans = async(req, res) => {
   try {
-    console.log('In here')
-    if(req.user.role === 'host'){
-      const vans = await Van.find({ hostId: req.user.id })
-      res.status(200).json(vans)
-      console.log('completed')
+
+    if (req.user.role !== 'host') {
+      return res.status(401).json({ message: "Not authorized, you are not a host" }); 
     }
-    res.status(401).json({ message: "Not authorized, you are not host"})
+
+    const vans = await Van.find({ hostId: req.user.id });
+
+    res.status(200).json(vans);
+    
   } catch (error) {
-    res.status(400).json({message: "Error fetching vans", error: error.message})
+    res.status(400).json({ message: "Error fetching vans", error: error.message })
   }
 }
+
 
 const getHostEarnings = async (req, res) => {
     try {
